@@ -196,6 +196,9 @@ var renderNodes = function() {
     console.log(value);
 		var div = $('<div/>');
     var ready = 'not_ready';
+
+    if(value.spec.unschedulable !== true) {
+
     $.each(value.status.conditions, function(index, condition) {
       if (condition.type === 'Ready') {
         ready = (condition.status === 'True' ? 'ready' : 'not_ready' )
@@ -204,8 +207,8 @@ var renderNodes = function() {
 
  		var eltDiv = $('<div class="window node ' + ready + '" title="' + value.metadata.name + '" id="node-' + value.metadata.name +
                  '" style="left: ' + (x + 250) + '; top: ' + y + '"/>');
-	  eltDiv.html('<span><b>Node</b><br/><br/>' + 
-          truncate(value.metadata.name, 6) +
+	  eltDiv.html('<span><b>Node</b><br/><br/>' +
+          truncate(value.metadata.name, 12) +
           '</span>');
     div.append(eltDiv);
 
@@ -213,6 +216,7 @@ var renderNodes = function() {
 		elt.append(div);
 
     x += 120;
+  }
  });
 }
 
@@ -221,7 +225,7 @@ var renderGroups = function() {
 	var y = 10;
 	var serviceLeft = 0;
 	var groupOrder = makeGroupOrder();
-  var counts = {} 
+  var counts = {}
 	$.each(groupOrder, function(ix, key) {
 		list = groups[key];
 		// list = value;
@@ -239,19 +243,21 @@ var renderGroups = function() {
         if ('deletionTimestamp' in value.metadata) {
           phase = 'terminating';
         }
-				eltDiv = $('<div class="window pod ' + phase + '" title="' + value.metadata.name + '" id="pod-' + value.metadata.name +
+				eltDiv = $('<div class="window pod ' + phase + '" title="' + value.spec.containers[0].image + '" id="pod-' + value.metadata.name +
 					'" style="left: ' + (x + 250) + '; top: ' + (y + 160) + '"/>');
-				eltDiv.html('<span>' + 
-          truncate(value.metadata.name, 8, true) +
+				eltDiv.html('<span>' +
+          truncate(value.metadata.name, 38, true) +
           (value.metadata.labels.version ? "<br/>" + value.metadata.labels.version : "") + "<br/><br/>" +
-          "(" + (value.spec.nodeName ? truncate(value.spec.nodeName, 6) : "None")  +")" +
+          truncate(value.spec.containers[0].image, 50) + "<br/><br/>" +
+          "<img src='http://localhost:8001/api/v1/proxy/namespaces/default/pods/" + value.metadata.name + "/image.jpg' width='100px'>" + "<br/><br/>" +
+          "(" + (value.spec.nodeName ? truncate(value.spec.nodeName, 12) : "None")  +")" +
           '</span>');
 			} else if (value.type == "service") {
 				eltDiv = $('<div class="window wide service ' + phase + '" title="' + value.metadata.name + '" id="service-' + value.metadata.name +
 					'" style="left: ' + 75 + '; top: ' + y + '"/>');
-				eltDiv.html('<span>' + 
+				eltDiv.html('<span>' +
           value.metadata.name +
-          (value.metadata.labels.version ? "<br/><br/>" + value.metadata.labels.version : "") + 
+          (value.metadata.labels.version ? "<br/><br/>" + value.metadata.labels.version : "") +
           (value.spec.clusterIP ? "<br/><br/>" + value.spec.clusterIP : "") +
           (value.status.loadBalancer && value.status.loadBalancer.ingress ? "<br/><a style='color:white; text-decoration: underline' href='http://" + value.status.loadBalancer.ingress[0].ip + "'>" + value.status.loadBalancer.ingress[0].ip + "</a>" : "") +
           '</span>');
@@ -265,13 +271,13 @@ var renderGroups = function() {
         var left = minLeft > calcLeft ? minLeft : calcLeft;
 				eltDiv = $('<div class="window wide controller" title="' + value.metadata.name + '" id="controller-' + value.metadata.name +
 					'" style="left: ' + (left + counts[key] * 100) + '; top: ' + (y + 100 + counts[key] * 100) + '"/>');
-				eltDiv.html('<span>' + 
+				eltDiv.html('<span>' +
           value.metadata.name +
-          (value.metadata.labels.version ? "<br/><br/>" + value.metadata.labels.version : "") + 
+          (value.metadata.labels.version ? "<br/><br/>" + value.metadata.labels.version : "") +
           '</span>');
 			}
 			div.append(eltDiv);
-			x += 130;
+			x += 150;
 		});
 		y += 400;
 		serviceLeft += 200;
