@@ -133,22 +133,22 @@ var connectUses = function() {
 			if (podKey == key) {
 				$.each(list, function(j, serviceId) {
           //console.log('connect: ' + 'pod-' + pod.metadata.name + ' to service-' + serviceId);
-					jsPlumb.connect(
-					{
-						source: 'pod-' + pod.metadata.name,
-						target: 'service-' + serviceId,
-						endpoint: "Blank",
-						//anchors:["Bottom", "Top"],
-            anchors:[[ 0.5, 1, 0, 1, -30, 0 ], "Top"],
-						//connector: "Straight",
-            connector: ["Bezier", { curviness:75 }],
-						paintStyle:{lineWidth:2,strokeStyle:color},
-						overlays:[
-    						[ "Arrow", { width:15, length:30, location: 0.3}],
-    						[ "Arrow", { width:15, length:30, location: 0.6}],
-    						[ "Arrow", { width:15, length:30, location: 1}],
-    					],
-					});
+					// jsPlumb.connect(
+					// {
+					// 	source: 'pod-' + pod.metadata.name,
+					// 	target: 'service-' + serviceId,
+					// 	endpoint: "Blank",
+					// 	//anchors:["Bottom", "Top"],
+          //   anchors:[[ 0.5, 1, 0, 1, -30, 0 ], "Top"]
+					// 	//connector: "Straight",
+          //   // connector: ["Bezier", { curviness:75 }],
+					// 	// paintStyle:{lineWidth:2,strokeStyle:color}
+					// 	// overlays:[
+    			// 	// 		[ "Arrow", { width:15, length:30, location: 0.3}],
+    			// 	// 		[ "Arrow", { width:15, length:30, location: 0.6}],
+    			// 	// 		[ "Arrow", { width:15, length:30, location: 1}],
+    			// 	// 	],
+					// });
 				});
 			}
 		});
