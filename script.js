@@ -249,9 +249,10 @@ var renderGroups = function() {
           truncate(value.metadata.name, 38, true) +
           (value.metadata.labels.version ? "<br/>" + value.metadata.labels.version : "") + "<br/><br/>" +
           truncate(value.spec.containers[0].image, 50) + "<br/><br/>" +
-          "<img src='http://localhost:8001/api/v1/proxy/namespaces/default/pods/" + value.metadata.name + "/image.jpg' width='100px'>" + "<br/><br/>" +
+          "<img src='images/" + value.spec.containers[0].image.substring(value.spec.containers[0].image.indexOf(':') + 1) + ".jpg' width='100px'>" + "<br/><br/>" +
           "(" + (value.spec.nodeName ? truncate(value.spec.nodeName, 12) : "None")  +")" +
-          '</span>');
+					'</span>');
+					// "<img src='http://localhost:8001/api/v1/proxy/namespaces/default/pods/" + value.metadata.name + "/image.jpg' width='100px'>" + "<br/><br/>" +
 			} else if (value.type == "service") {
 				eltDiv = $('<div class="window wide service ' + phase + '" title="' + value.metadata.name + '" id="service-' + value.metadata.name +
 					'" style="left: ' + 75 + '; top: ' + y + '"/>');
